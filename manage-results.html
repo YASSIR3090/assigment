@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Manage Results - Student Management System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" />
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            overflow-x: hidden;
+        }
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            background-color: #1e2329;
+            position: fixed;
+            color: white;
+            transition: all 0.3s;
+        }
+        .sidebar-header {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid #3e444a;
+        }
+        .sidebar-header img {
+            width: 70px;
+            height: 70px;
+            object-fit: contain;
+            margin-bottom: 15px;
+        }
+        .sidebar-header h5 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-top: 5px;
+        }
+        .nav-link {
+            color: #adb5bd;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+        .nav-link:hover, .nav-link.active {
+            background-color: #28a745;
+            color: white;
+        }
+        .nav-link i {
+            margin-right: 15px;
+            font-size: 1.2rem;
+        }
+        .main-content {
+            margin-left: 250px;
+            padding: 30px;
+        }
+        .top-bar {
+            background-color: white;
+            padding: 15px 30px;
+            margin: -30px -30px 30px -30px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .page-title {
+            font-weight: 600;
+            color: #1e2329;
+            font-size: 1.4rem;
+        }
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            order: 2;
+        }
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6c757d;
+            font-weight: bold;
+            border: 2px solid #e0e0e0;
+        }
+        .user-avatar i {
+            font-size: 1.3rem;
+            color: #6c757d;
+        }
+        .user-info-text {
+            display: flex;
+            flex-direction: column;
+            text-align: right;
+        }
+        .user-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: #333;
+        }
+        .user-role {
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+        .top-bar-content {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            align-items: center;
+        }
+        .btn-add {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+        }
+        .btn-add i {
+            margin-right: 8px;
+        }
+        .table-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+        .course-code {
+            font-family: monospace;
+            background-color: #e9ecef;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .grade-A { color: #28a745; font-weight: bold; }
+        .grade-B { color: #17a2b8; font-weight: bold; }
+        .grade-C { color: #ffc107; font-weight: bold; }
+        .grade-D { color: #dc3545; font-weight: bold; }
+        @media (max-width: 768px) {
+            .sidebar { 
+                width: 70px; 
+            }
+            .sidebar span, .sidebar-header h5 { 
+                display: none; 
+            }
+            .sidebar-header img {
+                width: 50px;
+                height: 50px;
+                margin-bottom: 10px;
+            }
+            .main-content { 
+                margin-left: 70px; 
+            }
+            .user-info-text { 
+                display: none; 
+            }
+            .top-bar-content {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            .user-profile {
+                order: 1;
+                align-self: flex-end;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <img src="image/suza-logo.png" alt="SUZA Logo" />
+            <h5 class="mt-2">SUZA SMS</h5>
+        </div>
+        <nav class="mt-3">
+            <a href="dashboard.html" class="nav-link"><i class="bi bi-speedometer2"></i> <span>Dashboard</span></a>
+            <a href="manage-users.html" class="nav-link"><i class="bi bi-people"></i> <span>Manage Users</span></a>
+            <a href="manage-students.html" class="nav-link"><i class="bi bi-person-badge"></i> <span>Manage Students</span></a>
+            <a href="manage-courses.html" class="nav-link"><i class="bi bi-book"></i> <span>Manage Courses</span></a>
+            <a href="manage-allocation.html" class="nav-link"><i class="bi bi-link"></i> <span>Course Allocation</span></a>
+            <a href="manage-results.html" class="nav-link active"><i class="bi bi-journal-check"></i> <span>Manage Results</span></a>
+            <a href="index.html" class="nav-link mt-5 text-danger"><i class="bi bi-box-arrow-left"></i> <span>Logout</span></a>
+        </nav>
+    </div>
+    <div class="main-content">
+        <header class="top-bar">
+            <div class="top-bar-content">
+                <h4 class="page-title">Manage Results</h4>
+                <div class="user-profile">
+                    <div class="user-info-text">
+                        <span class="user-name">Bakari Juma</span>
+                        <span class="user-role">System Administrator</span>
+                    </div>
+                    <div class="user-avatar">
+                        <i class="bi bi-person-fill"></i>
+                    </div>
+                    <button class="btn btn-sm btn-outline-danger ms-3">Logout</button>
+                </div>
+            </div>
+        </header>
+        <div class="table-container">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h5>Student Results</h5>
+                <button class="btn btn-add" data-bs-toggle="modal" data-bs-target="#addResultModal">
+                    <i class="bi bi-plus-circle"></i> Add New Result
+                </button>
+            </div>
+            <table id="resultsTable" class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Student Name</th>
+                        <th>Reg No.</th>
+                        <th>Course Code</th>
+                        <th>Course Name</th>
+                        <th>Score</th>
+                        <th>Grade</th>
+                        <th>Academic Year</th>
+                        <th>Semester</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Bakari Juma</td>
+                        <td>SZ/2024/001</td>
+                        <td><span class="course-code">BIT 211</span></td>
+                        <td>Web Technologies</td>
+                        <td>85</td>
+                        <td><span class="grade-A">A</span></td>
+                        <td>2024/2025</td>
+                        <td>Semester 1</td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary me-1"><i class="bi bi-eye"></i></button>
+                            <button class="btn btn-sm btn-outline-warning me-1"><i class="bi bi-pencil"></i></button>
+                            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Fatma Omar</td>
+                        <td>SZ/2024/002</td>
+                        <td><span class="course-code">BIT 212</span></td>
+                        <td>Database Systems</td>
+                        <td>78</td>
+                        <td><span class="grade-B">B+</span></td>
+                        <td>2024/2025</td>
+                        <td>Semester 1</td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary me-1"><i class="bi bi-eye"></i></button>
+                            <button class="btn btn-sm btn-outline-warning me-1"><i class="bi bi-pencil"></i></button>
+                            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Ali Khamis</td>
+                        <td>SZ/2024/003</td>
+                        <td><span class="course-code">BIT 211</span></td>
+                        <td>Web Technologies</td>
+                        <td>62</td>
+                        <td><span class="grade-C">C</span></td>
+                        <td>2024/2025</td>
+                        <td>Semester 1</td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary me-1"><i class="bi bi-eye"></i></button>
+                            <button class="btn btn-sm btn-outline-warning me-1"><i class="bi bi-pencil"></i></button>
+                            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="modal fade" id="addResultModal" tabindex="-1" aria-labelledby="addResultModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addResultModalLabel">Add New Result</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addResultForm">
+                        <div class="mb-3">
+                            <label for="selectStudent" class="form-label">Select Student</label>
+                            <select class="form-select" id="selectStudent" required>
+                                <option value="">Choose Student</option>
+                                <option value="1">Bakari Juma (SZ/2024/001)</option>
+                                <option value="2">Fatma Omar (SZ/2024/002)</option>
+                                <option value="3">Ali Khamis (SZ/2024/003)</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="selectCourse" class="form-label">Select Course</label>
+                            <select class="form-select" id="selectCourse" required>
+                                <option value="">Choose Course</option>
+                                <option value="BIT 211">BIT 211 - Web Technologies</option>
+                                <option value="BIT 212">BIT 212 - Database Systems</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="score" class="form-label">Score</label>
+                            <input type="number" class="form-control" id="score" min="0" max="100" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="academicYear" class="form-label">Academic Year</label>
+                            <select class="form-select" id="academicYear" required>
+                                <option value="">Select Year</option>
+                                <option value="2024/2025">2024/2025</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-success">Add Result</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#resultsTable').DataTable({
+                paging: true,
+                searching: true,
+                ordering: true,
+                responsive: true
+            });
+        });
+    </script>
+</body>
+</html>
